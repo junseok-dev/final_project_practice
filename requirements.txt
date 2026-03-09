@@ -1,0 +1,10 @@
+# --- 유튜브 데이터 수집 및 오디오 처리 파이프라인 ---
+yt-dlp          # 유튜브 검색 및 음원 다운로드
+demucs          # AI 기반 보컬/배경음 분리
+pydub           # 오디오 슬라이싱 및 편집
+openai-whisper  # AI 기반 음성-텍스트 변환 (STT)
+pandas          # 데이터셋 메타데이터(CSV) 관리
+edge-tts        # (선택) 추가 합성 데이터 생성용 무료 TTS
+requests        # API 통신용 기본 라이브러리
+setuptools      # 의존성 빌드 도구
+torchcodec
