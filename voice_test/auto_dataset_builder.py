@@ -5,6 +5,12 @@ import whisper
 from pydub import AudioSegment
 import json
 import re
+import warnings
+
+# --- [0. 경고 메시지 무시 설정] ---
+# 특정 라이브러리에서 발생하는 노란색 경고(FutureWarning, UserWarning 등)를 숨깁니다.
+warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
 
 # --- [1. 프로젝트 설정: 특정 유튜버 타겟팅] ---
 # 검색이 잘 되면서도 말투가 잘 살아있는 키워드로 구성했습니다.
@@ -76,7 +82,8 @@ def separate_vocals(file_paths):
         if not os.path.exists(v_out):
             try:
                 subprocess.run(["demucs", "--two-stems", "vocals", "-o", VOCAL_DIR, path], check=True)
-            except: continue
+            except Exception:
+                continue
         if os.path.exists(v_out): v_paths.append(v_out)
     return v_paths
 
@@ -88,8 +95,8 @@ def slice_and_label_json(v_paths):
     count = 1
 
     for v_path in v_paths:
-        # 한국어 고정 분석
-        result = model.transcribe(v_path, language="ko", verbose=False)
+        # 한국어 고정 분석 (fp16=False로 CPU 경고 방지)
+        result = model.transcribe(v_path, language="ko", verbose=False, fp16=False)
         audio = AudioSegment.from_wav(v_path)
         
         for segment in result['segments']:
